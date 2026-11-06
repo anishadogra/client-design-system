@@ -1,0 +1,164 @@
+{
+  "schema_version": "1.0",
+  "client": "example-snack-brand",
+  "display_name": "Crunchwell Snacks (fictional example client)",
+  "aliases": ["crunchwell", "crunchwell snacks", "snack brand"],
+  "status": "active",
+  "updated": "2026-11-06",
+  "inherits": "_house",
+  "summary": "A fictional D2C snack brand, used to show a full client file. Founder-led talking-head and tasting reels in Hinglish: loud five-style caption cycle with a slight tilt, product names on the printed pack spelling, one warm orange accent, punchy SFX on the bite, a bright acoustic bed.",
+
+  "brand": {
+    "name_spelling": "'Crunchwell' is one word, capital C only (never CrunchWell or Crunch Well). Product names on overlays use the PRINTED pack spelling exactly, e.g. 'MASALA PEANUT CRISP'.",
+    "language": {
+      "designed_copy": "English. Owned tagline reused verbatim: 'Loud crunch. Clean label.'",
+      "spoken_captions": "Verbatim in the language spoken (Hinglish romanized, never translated); captions follow what is SAID even when it differs from the pack name.",
+      "notes": "Numbers on screen (protein, calories) must be checked against the actual pack; never invent nutrition figures."
+    },
+    "logo": {
+      "files": [],
+      "placement": {
+        "9:16": {"x": 32, "y": 38, "width": 140},
+        "default": {"x": 32, "y": 38, "width": 140}
+      },
+      "every_frame": true,
+      "never_ai_redraw": true,
+      "notes": "Master mark is orange on transparent; a cream recolour (same alpha) is used on orange cards. Add the client's real files to `files` (path relative to the repo or absolute) before rendering."
+    },
+    "handles": {"instagram": "@crunchwell.example"},
+    "contact": null
+  },
+
+  "palette": {
+    "brand_orange": "#E8622A",
+    "cream": "#FFF4E2",
+    "ink": "#1A1612",
+    "caption_cream": "#F6EBD3",
+    "keyword_gold": "#FFC94A",
+    "chip_orange": "#E8622A",
+    "plate_ink": "#1A1612",
+    "plate_cream": "#FFF8EE"
+  },
+
+  "fonts": {
+    "caption": {
+      "family": "Poppins",
+      "weight": "ExtraBold",
+      "file": "fonts/Poppins-ExtraBold.ttf",
+      "notes": "Body face of the caption cycle."
+    },
+    "caption_display": {
+      "family": "Anton",
+      "weight": "Regular",
+      "file": "fonts/Anton-Regular.ttf",
+      "notes": "Big reaction hits ('FIRST BITE') at 96-132 px and product-name label line 1 (72 px). Anton caps are ~0.73 of the point size: place from measured ink."
+    },
+    "caption_tag": {
+      "family": "Poppins",
+      "weight": "Bold",
+      "file": "fonts/Poppins-Bold.ttf",
+      "notes": "Small non-spoken aside below the chin."
+    }
+  },
+
+  "type_scale": {
+    "base_px_1080": 78,
+    "ratio": 1.414,
+    "notes": "Caption 78 px; label line 1 = 78 x 1.414^0 rounded to the Anton cap height; hero hits = 78 x 1.414 (110 px)."
+  },
+
+  "captions": {
+    "policy": "House policy PLUS: on tasting reels captions run THROUGHOUT the speech, so a product-name LABEL never suppresses captions; it stacks 95 px above the caption, or takes the top band while captions drop to the elbow line. No caption over the hero packshot.",
+    "size_px_1080": 78,
+    "placement": {
+      "9:16": {
+        "mode": "above_head",
+        "fallback": ["elbow", "bottom", "chest", "title_band"],
+        "gap_px": 68,
+        "band": [60, 900],
+        "centre_x": 480,
+        "notes": "Chosen PER CAPTION from what else is on screen: top band free -> above the head (fixed y for the cut); a product-name label on screen -> elbow line (fixed ink bottom, re-measured per take, never below y1520); above-head graphics -> fixed bottom band, one style, no tilt."
+      }
+    },
+    "styles": {
+      "outline": {
+        "font": "caption", "fill": "caption_cream", "stroke": "ink", "stroke_px": 8,
+        "shadow": {"color": "#000000", "opacity": 0.6, "dx": 0, "dy": 0, "blur": 9},
+        "keyword_fill": "keyword_gold"
+      },
+      "chip": {
+        "font": "caption", "fill": "#FFFFFF", "stroke": "ink", "stroke_px": 8,
+        "shadow": {"color": "#000000", "opacity": 0.6, "dx": 0, "dy": 0, "blur": 9},
+        "keyword_chip": "chip_orange", "keyword_chip_text": "#FFFFFF"
+      },
+      "plate_orange": {
+        "font": "caption", "fill": "#FFFFFF", "stroke": null, "stroke_px": 0,
+        "plate": "brand_orange", "plate_radius_px": 20, "plate_pad_px": [23, 10],
+        "keyword_fill": "keyword_gold"
+      },
+      "plate_cream": {
+        "font": "caption", "fill": "ink", "stroke": null, "stroke_px": 0,
+        "plate": "plate_cream", "plate_radius_px": 20, "plate_pad_px": [23, 10],
+        "keyword_fill": "brand_orange"
+      },
+      "plate_ink": {
+        "font": "caption", "fill": "#FFFFFF", "stroke": null, "stroke_px": 0,
+        "plate": "plate_ink", "plate_radius_px": 20, "plate_pad_px": [23, 10],
+        "keyword_fill": "keyword_gold"
+      },
+      "tag": {
+        "font": "caption_tag", "fill": "caption_cream", "stroke": "ink", "stroke_px": 5,
+        "keyword_fill": "keyword_gold"
+      },
+      "clean": {
+        "font": "caption", "fill": "#FFFFFF", "stroke": "#000000", "stroke_px": 9
+      }
+    },
+    "style_cycle": ["outline", "chip", "plate_orange", "plate_cream", "plate_ink"],
+    "tilt_deg": [1.5, 3.0],
+    "align_cycle": ["centre"],
+    "keyword_rule": "One keyword per card: the number if there is one, else the product or flavour word.",
+    "notes": "The five-style cycle is for plain talking-head and tasting reels. When a brief asks for small or clean captions, use `clean` at 52 px, no tilt."
+  },
+
+  "motion": {
+    "product_name_floor_s": 5.0,
+    "product_name_notes": "A product name on screen holds at least 5 s so it can be read and remembered.",
+    "hook": "Cold open only when a reveal is withheld (e.g. the first bite reaction)."
+  },
+
+  "audio": {
+    "bed_notes": "Bright acoustic or light percussion bed; nothing dark or minor-key on a tasting reel.",
+    "sfx": {
+      "signature": "One crunch SFX on the first bite, synced to the measured action frame."
+    }
+  },
+
+  "sacred_rules": [
+    "Pack art and the logo are never altered, recoloured, cropped or redrawn.",
+    "Product names are spelled exactly as printed on the pack.",
+    "Never claim a health benefit that is not printed on the pack."
+  ],
+
+  "formats": {
+    "five-style-caption-cycle": "outline -> chip -> plate_orange -> plate_cream -> plate_ink, tilt alternating 1.5-3.0 deg, one keyword per card.",
+    "product-name-label": "Anton line 1 (72 px) + Poppins line 2 (34 px), stacked 95 px above the caption, held >= 5 s."
+  },
+
+  "references": {
+    "approved_builds": [],
+    "reference_reels": [],
+    "website": "https://example.com"
+  },
+
+  "open_questions": [
+    "Logo master files (orange and cream) have not been supplied yet.",
+    "Static brand type is a geometric sans; should video captions also move off Poppins to match?"
+  ],
+
+  "sources": [
+    "example: invented for this repo to show the shape of a full client file",
+    "example: brand guide v1 (palette, logo colourways, tagline)",
+    "example: first approved tasting reel (caption cycle, tilt, label stack, 5 s product-name floor)"
+  ]
+}

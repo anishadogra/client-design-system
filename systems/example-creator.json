@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "client": "example-creator",
+  "display_name": "Studio Notes (fictional example creator page)",
+  "aliases": ["creator", "studio notes"],
+  "status": "personal",
+  "updated": "2026-11-06",
+  "inherits": "_house",
+  "summary": "A fictional solo creator page about AI tools, used to show a lighter client file. Calm white-and-ink captions with one teal keyword, no tilt; landscape YouTube cuts use the house right-hand caption column.",
+
+  "brand": {
+    "name_spelling": "'Studio Notes', two words, both capitalised.",
+    "language": {
+      "designed_copy": "English, sentence case."
+    },
+    "logo": {
+      "files": [],
+      "placement": {
+        "9:16": {"x": 32, "y": 38, "width": 120},
+        "16:9": {"x": 48, "y": 40, "width": 160}
+      },
+      "notes": "Wordmark only. Add the real file to `files` before rendering."
+    },
+    "handles": {"youtube": "@studionotes.example"}
+  },
+
+  "palette": {
+    "paper": "#F4F1EA",
+    "ink": "#17181C",
+    "teal": "#1F8A84",
+    "plate": "#17181C"
+  },
+
+  "fonts": {
+    "caption": {
+      "family": "Inter",
+      "weight": "Black",
+      "file": "fonts/Inter-Black.ttf",
+      "notes": "Caption face, 9:16."
+    },
+    "display": {
+      "family": "Inter",
+      "weight": "ExtraBold",
+      "file": "fonts/Inter-ExtraBold.ttf",
+      "notes": "Title cards."
+    }
+  },
+
+  "type_scale": {
+    "base_px_1080": 64,
+    "ratio": 1.25,
+    "notes": "Captions 64 px; title cards 64 x 1.25^2 = 100 px."
+  },
+
+  "captions": {
+    "case": "sentence",
+    "size_px_1080": 64,
+    "placement": {
+      "16:9": {"style": "landscape_column"}
+    },
+    "styles": {
+      "calm": {
+        "font": "caption", "fill": "#FFFFFF", "stroke": "ink", "stroke_px": 6,
+        "shadow": {"color": "#000000", "opacity": 0.35, "dx": 0, "dy": 3, "blur": 6},
+        "keyword_fill": "teal"
+      },
+      "landscape_column": {
+        "font": "caption_landscape", "fill": "ink", "stroke": "#FFFFFF", "keyword_fill": "teal"
+      }
+    },
+    "style_cycle": ["calm"],
+    "tilt_deg": [0, 0],
+    "notes": "One uniform style. No tilt, no alternating alignment."
+  },
+
+  "sacred_rules": [
+    "Screen recordings are real; never mock a tool's interface."
+  ],
+
+  "references": {
+    "approved_builds": [],
+    "reference_reels": [],
+    "website": null
+  },
+
+  "open_questions": [
+    "Is the teal keyword colour also used on thumbnails?"
+  ],
+
+  "sources": [
+    "example: invented for this repo to show a minimal client file that leans on the house defaults"
+  ]
+}

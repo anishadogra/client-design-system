@@ -1,0 +1,254 @@
+{
+  "schema_version": "1.0",
+  "client": "_house",
+  "display_name": "House defaults (every short-form job, every client)",
+  "status": "house",
+  "updated": "2026-11-06",
+  "inherits": null,
+  "summary": "Rules that bind every short-form job unless a client file overrides them: measured (asymmetric) Instagram safe zones with a y290 text floor, face-anchored captions band-centred and graphic-only beats frame-centred, verbatim romanized captions that never drift, the real logo bare in the corner on every frame, frames shown as shot, raw UGC played uncut, hard-cut end cards, and a voice-first audio chain with a measured ~16.5 dB bed.",
+
+  "brand": {
+    "name_spelling": null,
+    "language": {
+      "designed_copy": null,
+      "spoken_captions": "Verbatim in the language actually spoken. Hinglish is romanized (Roman script, never Devanagari) and NEVER translated; English words the speaker code-switches to stay English.",
+      "notes": "Designed-copy language is set per client. The speaker's own stated wording for their own line beats the transcript. Their explicit spelling beats verbatim for numbers and idioms ('ten on ten' is captioned 10/10). An expletive stays in the audio as recorded; the caption stars it ('f***ing') and the brand risk is stated in one line. Transcription: pick the whisper language from a probe (hi for Hinglish, en for English takes); smaller models auto-translate; never trust a VAD-filtered pass for coverage (VAD drops the tail); run two passes (hi + en) on code-switched lines; 0 Devanagari may survive in shipped captions. An unintelligible fragment whose most likely reading damages the client is cut, not captioned."
+    },
+    "logo": {
+      "files": [],
+      "placement": {
+        "9:16": {"x": 32, "y": 38, "width": 140}
+      },
+      "every_frame": true,
+      "never_ai_redraw": true,
+      "notes": "Applies to every logo placement for every client: bare real master mark, NO pill, chip, plate, box, badge, scrim or panel; hard into the extreme corner, top-left unless the client names another corner; x32/y38 at ~140 px wide (~13% of frame width) on 1080x1920; on EVERY frame including the end card, even when the card already carries a big lockup; composited untouched from the real master (a recolour through the master's own alpha is allowed, a redraw never). Verify by decoding every frame of the MUXED file: max-min luma in the logo rect > 70; for a coloured mark also report RGB distance (luma alone false-alarms on skin). Two-variant marks: hard-swap dark/light MASTER files with hysteresis (switch to the light variant below background luma 118, back above 148; absorb runs shorter than ~10 frames); never crossfade. On a brand-coloured card use a contrasting colourway. If contrast is genuinely a problem, say so in one line and let the client decide; never add scaffolding. Placement for 16:9, 1:1 and 4:5 is not settled (see open_questions)."
+    },
+    "handles": {},
+    "contact": null
+  },
+
+  "palette": {},
+
+  "fonts": {
+    "caption_landscape": {
+      "family": "Poppins",
+      "weight": "ExtraBold",
+      "file": "fonts/Poppins-ExtraBold.ttf",
+      "notes": "~38 px, the 16:9 right-column caption face."
+    }
+  },
+
+  "type_scale": {
+    "base_px_1080": null,
+    "ratio": null,
+    "notes": "Never guess sizes: pick ONE base per layout and multiply/divide by ONE ratio. Golden 1.618 (logos, luxury, hero) / Silver 1.414 (UI grids, tech) / Perfect Fourth 1.333 (H1-H2, posters) / Perfect Fifth 1.25 (buttons, body, spacing) / Minor Third 1.2 (editorial). Bigger ratio = more drama; skipping steps is legitimate. Never print the system on the artwork. No house-wide base or ratio; choose per job. Caption sizes are SOLVED, not picked: binary-search the largest uniform size at which every caption fits one line inside its band, fitting the rendered INK (glyph + 2x stroke) at the entrance extreme (easeOutBack peaks at 1.10x; rotation adds h*sin(theta)); split long captions at word timings, never shrink below the floor or wrap."
+  },
+
+  "captions": {
+    "policy": "Captions fill overlay gaps only: the spoken words appear on screen exactly ONCE, via overlay text OR caption, never both. Test = word identity between the overlay and the spoken line, beat by beat; default to NO caption where the overlay already carries the words. A product-NAME label is not a transcription: stack it above the caption (95 px higher) instead of suppressing captions. An English overlay that merely restates the spoken line is cut. No captions during a character-intro card (the card carries the name).",
+    "language": "As spoken, verbatim; Hinglish romanized, never translated (see brand.language).",
+    "case": "as_spoken",
+    "max_words": null,
+    "max_lines": 1,
+    "min_on_screen_s": null,
+    "size_px_1080": null,
+    "placement": {
+      "9:16": {
+        "mode": "above_head",
+        "fallback": ["title_band", "chest", "elbow", "bottom"],
+        "gap_px": 68,
+        "y_ink_bottom": null,
+        "band": [60, 900],
+        "centre_x": 480,
+        "side": null,
+        "column": null,
+        "anchor": null,
+        "size_px": null,
+        "notes": "The band is decided by what the frame is doing, per caption, never a standing y. above_head: close talking head with an empty wall above; ink bottom 68 px (a one-or-two-finger gap) above the hairline; a 300-400 px gap reads as 'too far'; usually needs a reframe (seat the subject lower) so the band exists. The above slot is a FIXED y for the cut = min(head_top over the windows where captions sit above) - 68, not head-tracked. title_band: when the subject is too close to the lens for the 68 px slot, put the caption in y300-410 and let it overlap hair/forehead, eyes clear. chest / elbow: when a product-name label (or other element) needs the upper band; two text elements per band is the limit; chest = clamp(head(t)+520, 1120, 1290), elbow = fixed ink bottom on the measured elbow line; choose above/below PER CAPTION in code from label-window overlap. bottom: when above-head graphics own the top band, ONE style at a fixed bottom band, no tilt, no alternating align, frame-centred cx 540. Every mode: ink top >= y290, ink bottom <= y1520, ink right <= x900. Face-anchored captions centre on the band (cx 480, x60-900); anything with no face to anchor to is frame-centred (cx 540, x180-900)."
+      },
+      "16:9": {
+        "mode": "side_column",
+        "fallback": [],
+        "gap_px": null,
+        "y_ink_bottom": null,
+        "band": null,
+        "centre_x": null,
+        "side": "right",
+        "column": [1530, 1858],
+        "anchor": "eye_line",
+        "size_px": 38,
+        "notes": "Above-head captions read badly in 16:9. Graphics on one side, captions on the OTHER side, subject in the middle; captions are a column wrapped to 2-5 lines (this overrides max_lines for 16:9), block centred on the eye-line so it does not jump as the line count changes. 62 px margin on BOTH sides (32 px read tight). A white halo adds ~6 px beyond the glyphs: subtract it from the wrap width. Column x and eye-line were measured on one standing YouTube setup; re-derive on new footage."
+      }
+    },
+    "styles": {},
+    "tilt_deg": null,
+    "align_cycle": null,
+    "keyword_rule": null,
+    "notes": "No-drift: three independent causes, fix all three and GATE it: (1) pin labels/badges/captions to a FIXED y from the head track's EXTREME, never head-tracked; (2) every caption exactly ONE line at one solved uniform size; (3) crop the tile vertically to the font's ascent+descent (baseline anchoring) so descenders do not shift it. QC collects (position, height) per element class over every frame and asserts exactly one distinct value. Type that must TOUCH the subject (a prop) is the opposite case: anchor by the rendered alpha bbox and keep prop copy to 1-3 words on one line. Keep keyword emphasis without changing line height (same size, heavier face or colour). After any re-placement, re-check contrast against what is actually behind the new position (white with a thin stroke dies on cream). Caption display windows: compute all starts first, then clamp each end against the next caption's actual start. Styles, sizes, tilt, alignment and keyword colours are client-specific (see client files)."
+  },
+
+  "layout": {
+    "canvas": {
+      "9:16": [1080, 1920],
+      "16:9": [1920, 1080],
+      "1:1": [1080, 1080],
+      "4:5": [1080, 1350]
+    },
+    "safe_zones": {
+      "9:16": {
+        "ig_chrome_px": {"top_status_bar": 108, "bottom": 400, "right_action_rail": 180, "left": 60},
+        "text_top_min_y": 290,
+        "bottom_unsafe_from_y": 1520,
+        "ink_band_x": [60, 900],
+        "eye_line_y": 653,
+        "eye_line_fraction": 0.34,
+        "title_band_y": [307, 403],
+        "title_band_fraction": [0.16, 0.21],
+        "cover_critical_band_y": [420, 1500],
+        "reels_tab_tile_4x5_y": [285, 1635],
+        "profile_grid_1x1_y": [420, 1500],
+        "notes": "Measured against real Instagram chrome (the popular uniform ~10% box is wrong: under-margined ~200 px at the bottom and ~70 px on the right). 108 is the status bar only; no caption, title or HUD text above y290 (the IG top UI covers ~12-15% of 1920); only the logo lives up there. Nothing readable below y1520; x<=900 clears the like/comment/share rail. Place animated elements from their ENTRANCE extreme. Audit per frame through the renderer's own draw functions against y290 / y1520 / x900, thresholding at solid ink (alpha > 150) and reporting the drop shadow separately. Reel COVERS: author at 1080x1920 (a 1080x1350 cover gets scaled 1.42x and loses 228 px per side); every critical element inside y420-1500, nothing important outside y285-1635."
+      },
+      "16:9": {
+        "margin_px": 62,
+        "notes": "Measured on one static YouTube talking-head frame: subject x800-1440; left wall = graphics panel; right column x1530-1858 = captions; the bottom third is often unusable when the subject fills it. Re-measure per footage."
+      },
+      "4:5": {
+        "type_inside_x": [60, 1020],
+        "notes": "Feed POSTS at 1080x1350: the profile grid shows the centre 3:4 (x34-1046), so keep all type inside x60-1020. Never author a reel COVER at 4:5."
+      },
+      "1:1": {
+        "notes": "No measured 1:1 video safe zone yet. The main profile grid shows the 1:1 crop of a 9:16 cover at y420-1500."
+      }
+    },
+    "centring": {
+      "test": "Is there a face in this frame for the eye to anchor to? Yes -> band-centre. No -> frame-centre.",
+      "face_anchored_captions": {"centre_x": 480, "band": [60, 900]},
+      "graphic_only_beats": {"centre_x": 540, "band": [180, 900]},
+      "bottom_captions_under_above_head_graphics": {"centre_x": 540},
+      "full_frame_override": "When the client asks for the full frame on a text-led layout, widen to a band symmetric about cx 540 (margin 48 = x48-1032) and flag the action-rail exposure in one line.",
+      "notes": "Band-centring cx 480 is only for captions anchored to a talking head; title cards, counters, chips, meme and transition cards, CTAs and character-intro names are frame-centred cx 540 in the 720-wide band. Ink-centring is measured from a render (getbbox), never inferred from bearings."
+    },
+    "framing": {
+      "multi_person_shot": "Ship the composition as shot: letterbox the landscape frame full-width into the 9:16 page (1080x608 strip, vertical middle, soft shadow under it) and use the space above/below for type. Never split, stack or side-by-side it; emphasis on one person = a graphic beat, not a crop.",
+      "multi_person_push_in_cap": 1.12,
+      "shared_frame_captions": "Anchor 68 px above THAT speaker's measured hairline, bias the block over them, clamp to x180-900, add a small pointer tail; a caption may break out of the letterboxed strip onto the page.",
+      "letterbox_page": "Same frame blurred (GaussianBlur 46) and darkened to 0.40 behind the sharp asset, or the brand's page colour.",
+      "punch_in_ceiling": "Measure the subject's gesture extent per beat and cap zoom at HALF_W / max|x - centre|; if every ceiling refuses a move, spend the motion on the graphics layer and say so in the handoff.",
+      "camera_move_travel": "A shake/whip/drift needs base zoom > 1.0: travel = SW*(z-1)/2; a crop can only shift the subject W*(z-1)/2 and the clamp eats the rest silently.",
+      "above_head_reframe": "Above-head captions usually need the subject seated lower; compute the shift ceiling H*(1-1/s)/2 before promising a type size.",
+      "mirrored_selfie": "Read a frame containing text before building; hflip a mirrored front-camera source (a camera fix) and say so in one line.",
+      "no_device_mockups": "Social content (memes, other reels, posts) goes full-bleed 1080x1920 with a reels-style UI overlay; never a phone-in-hand or room mockup.",
+      "website_walkthrough_default": "Full-bleed REAL screen recording frame-synced to the spoken words + the speaker in a small rounded bottom-right corner cam + tap ripples + real logo top-left every frame + verbatim captions. Never mock a client's UI.",
+      "photoreal_props": "Anything inside the physical scene is photoreal (generate + key, QC the matte over mid-grey); flat vector is for UI-style cards, overlays and captions only.",
+      "illustrations": "Match the audience's real context (homes, hands, props); no generic robots or machines as stand-ins for AI.",
+      "third_party_content": "Other creators' posts, faces and footage are style reference only, never on screen without permission.",
+      "overlay_restraint": "The overlay serves the photograph: when a card collides with the subject, raise and shrink it; a reserved text band is lit/feathered, never a hard dark bar. Never cover a face."
+    }
+  },
+
+  "motion": {
+    "comprehension_floor_s": 2.0,
+    "comprehension_notes": "Any element a viewer must READ or understand (comparison, diagram, chart, stat, payoff frame, name) holds >= 2.0 s even if the brief says less; check the LAST item of a fast spoken list. When the EAR carries the beat and the word is 1-3 syllables, 1.2-1.3 s is right. Word-synced spoken captions are not held to 2 s.",
+    "sfx_led_demo_beat_s": [1.2, 1.3],
+    "establish_static_before_scroll_s": [3, 4],
+    "rolling_panel_speed_px_s": 500,
+    "end_card": "Content plays to its last frame, then a clean HARD CUT to the card; never a dissolve unless asked. Any element still on screen at the cut HOLDS. Program audio gets a ~0.4 s seam fade; a bed may carry the card.",
+    "freeze_cards": "A freeze/intro card lands at the END of the subject's beat (never mid-action), only inside a MEASURED silence (10 ms RMS, -42 dBFS gate), extracted by FRAME INDEX through the renderer's own sequential decode (never ffmpeg -ss), and afterwards cuts to the NEXT shot's first frame. Verify the card's CONTENT, not just that a card exists.",
+    "never_freeze_mid_word": "Freeze stills come from inter-sentence VAD gaps: closed or relaxed mouth, open eyes, pose close to the un-freeze frame.",
+    "hook": "A cold-open hook is NOT a default: build one only when a payoff is being withheld; otherwise start on the first frame and first line. If it seems worth it, OFFER it.",
+    "ugc_uncut": "On UGC tasting/review takes the hook is the only re-ordering; after it the raw plays THROUGH. 'Remove pauses' = true dead air with no movement only; silent gestures, duplicates and expletives belong to the speaker.",
+    "fast_forward": "Fast-forward is for SILENCE only: build from the transcript, merge speech spans with gaps < 1.2 s, add ~0.16 s handles, play every block 1:1; speed only the gaps; show a stopwatch + 'Nx' badge; never atempo the source under a fast-forward.",
+    "no_unrequested_beats": "Never insert a frame, card or beat to solve a timing problem of our own making; bend the requested element; if an insert really is best, OFFER it.",
+    "illustrate_the_beat": "Reach for a visual insert before another caption and propose them unprompted: place -> map, list -> bubbles, comparison -> both with the loser crossed out, URL -> real screen recording. This licenses illustrating what is said, not adding content.",
+    "spatial_constraints": "A brief that ties graphics to the body or a gesture ('when I point left, X is there') is a HARD structural constraint; restructure within it, never trade it for type size.",
+    "animation_verification": "Assert every animated channel actually reaches the canvas (diff two rendered frames); verify an entrance where its alpha has built.",
+    "list_pages": "Clear the old page BEFORE the next page's first cue.",
+    "clones": "Match clone takes by uniformly time-STRETCHING the shorter take, never truncating the one still speaking.",
+    "cold_reader": "Any title card must carry the news on the frame itself (who, what, when); expand acronyms.",
+    "sfx_density": "Default is ONE signature whoosh on the opening title; whoosh only on real scene transitions."
+  },
+
+  "audio": {
+    "delivery_loudness_lufs": -14.0,
+    "true_peak_ceiling_dbtp": -1.0,
+    "measure_on": "The WRITTEN stereo MUXED deliverable (AAC re-introduces true peak; never trust a pre-encode WAV).",
+    "voice_chain": "Master the VOICE STEM first: acompressor threshold -24 dB ratio 2.5 attack 6 release 120 + static gain + alimiter -1.5 dB; master a mono stem to (target - 3 dB), upmix L=R, then solve the duck against that stem, sum, and apply ONLY a safety limiter. Fix loudness on the voice stem's makeup before the duck solve, never by gaining the finished mix. Phone sources often decode above 0 dBFS as float: normalise upstream.",
+    "speech_active_gate": "50 ms frames above -45 dBFS, measured on the mastered stem; it picks the bed target.",
+    "bed_under_dense_speech_db": 16.5,
+    "bed_under_dense_speech_status": "Working default, not ratified by every client. 8.9 and 12.5 dB were rejected as 'too loud'. Start at ~16 dB when speech-active > ~90%.",
+    "bed_under_speech_band_db": [12, 18],
+    "bed_in_gaps_db": [7, 9],
+    "gap_target_db": 8.0,
+    "duck_method": "Per speech run: target the run's own RMS minus the target, 160 ms look-ahead as a running MINIMUM, then ITERATE build -> measure -> offset until measured == target (the target metric must equal the verify metric). Merge runs < 250 ms apart first. Gaps are a separate solved target. Montage beds with no dialogue: 7-9 dB under the dialogue mean.",
+    "too_loud_twice": "After a second 'too loud', stop cutting level: carve -5 dB @ 3 kHz (Q ~1.1) and -2.5 dB @ 1.8 kHz; a third pass offers a warmer track. Rebuild every revision from the ORIGINAL stems; audio fixes are audio-only remuxes (-c:v copy).",
+    "verify": "Prove the gap on the shipped file: decode to mono, find the AAC priming lag by cross-correlation, gain-align per 250 ms speech window, subtract; the residual IS the bed. Report p10 / median / p90 of voice-minus-residual over speech windows.",
+    "music_selection": "Music is DIRECTED to the video's emotional beats: analyse the video first, then pick emotion -> feeling -> energy -> track -> section. Measure key mode (minor can read 'depressing'), dynamic range, centroid, and the energy slope of the window used; start at a measured flat window, not in a fade. Never judge a track by its title.",
+    "taste": "Set per client. Royalty-free only unless the client supplies a licence. CC-BY tracks need a credit.",
+    "never": [
+      "Never burn a named commercial track into a deliverable; ship an original or royalty-free bed and let the client add a licensed track in-app.",
+      "Never name a real artist in a music-generation prompt (translate to sonic descriptors).",
+      "Never put ripped film, TV or meme audio in a client deliverable.",
+      "Never use -shortest on the mux; pad audio to NFRAMES/FPS and assert the frame count on the muxed file."
+    ],
+    "sfx": {
+      "layer": "SFX are a separate layer from the bed: sparse transients levelled by PEAK relative to the voice peak (-5 to -12 dB under), never RMS-matched.",
+      "source": "Synthesise locally for client work (click, tick, pop, whoosh, ding, impact), royalty-free.",
+      "sync": "Pin the ACTION frame from a dense 0.04 s frame strip first, then confirm it sits in a silence, then cap the tail before the next word. Prove the cue moved in the delivered file.",
+      "placement_craft": "The sound IS the cut (onset within 1-2 frames of a hard cut)."
+    }
+  },
+
+  "sacred_rules": [
+    "Bare logo mark only. No pill, chip, plate, box, badge, scrim or panel behind it. Nothing that isn't the logo itself.",
+    "The logo is on every single frame of the deliverable, end card included.",
+    "Composite the REAL logo file; never AI-redraw it.",
+    "No caption, title or HUD text above y290 (only the logo lives up there).",
+    "The spoken words appear on screen exactly once: via overlay text OR a caption, never both.",
+    "Don't translate the speaker. If they say \"ha ha aisa hota hai\" then the caption says exactly that.",
+    "Captions and overlays never move up and down between lines.",
+    "Show the frame as shot. If two people are in the frame, both stay visible.",
+    "A stated duration for a comprehension beat is a FLOOR, not a target.",
+    "End cards: let the full content play, then a clean HARD CUT to the card; never a dissolve unless asked.",
+    "Never freeze a talking head mid-word.",
+    "Only build a cold open when a payoff is being withheld. Otherwise start where the speaker started.",
+    "Master the voice stem before solving the duck, then only a safety limiter on the sum.",
+    "Music must not overpower dialogue."
+  ],
+
+  "formats": {
+    "website-walkthrough-reel": "State-machine capture over frame indices at viewport 432x768 @ device scale 2.5 (= 1080x1920), pre-scroll for lazy images, ease-out flicks (1-(1-x)^3) anchored to word timings, third-party widgets hidden via injected CSS, tap ripples drawn 0.18 s before the state change, payoff frame >= 2 s.",
+    "feed-post-reveal": "Static image on its own blurred copy (GaussianBlur 46, brightness 0.40), enters 190 px low and settles over 0.55 s (smoothstep), slow push 1.045 -> 1.000 across the hold.",
+    "rolling-prompt-panel": "Pre-rendered tall text strip behind a fixed feathered window (~70 px ramps), ~500 px/s, scroll indicator, dark translucent plate radius 26, NO captions during it; hold the document STATIC and legible first.",
+    "character-intro": "Freeze at the END of the beat, blackout outline, snap on a white flash, push-in 1.000 -> 1.048, name slides in from the left, hard cut out; 2.2 s default, 2.0 s floor; name frame-centred cx 540.",
+    "above-head-inserts": "Graphics ABOVE the head from the measured head-top, captions pinned to the BOTTOM in ONE style with no tilt; rounded sticker tiles with a stroke and soft shadow; size for the PADDED tile.",
+    "cold-open-payoff-freeze-hook": "CONDITIONAL (only when a payoff is withheld). 0.5 s freeze on the sharpest frame of the reveal + a 2-3 word reaction card + the live reaction cut in at the measured motion-energy jump; ~2 s total; the raw then plays uncut.",
+    "measured-overlay-placement": "Temporal std-dev over ~40 downsampled frames -> coarse grid; place overlays in the quiet cells.",
+    "solved-caption-placement": "Solve each caption's position against the renderer's own frames (avoid-mask + hand-measured no-go rects; cost = overlap*160 + band distance + alignment change + size penalty).",
+    "subject-reframe-rig": "Keyframed (zoom_extra, shift_px, vshift_px); ONE crop_box(t) is the single source of truth; verify with a probe that calls the renderer's own crop_box.",
+    "voice-stem-first-mastering": "See audio.voice_chain and audio.verify."
+  },
+
+  "references": {
+    "approved_builds": [],
+    "reference_reels": [],
+    "website": null
+  },
+
+  "open_questions": [
+    "Is the ~16.5 dB voice-minus-music bed under dense speech right for this client? Ask for an explicit verdict.",
+    "Which boundary does each element lock to: the logo (x32/y38 sits INSIDE Instagram's ~108 px top band), the title, the captions, the eyes?",
+    "Logo placement (x, y, width) for 16:9, 1:1 and 4:5.",
+    "Delivery true-peak ceiling: -1.0 dBTP or -1.5 dBTP?",
+    "Can a meme or film clip ever go on a client deliverable?"
+  ],
+
+  "sources": [
+    "house: Instagram safe zones measured against real app chrome on 1080x1920 frames",
+    "house: caption placement, no-drift and centring rules settled across approved talking-head reels",
+    "house: 16:9 side-column caption ruling from an approved landscape YouTube edit",
+    "house: logo placement rule (bare mark, corner, every frame)",
+    "house: audio chain (voice stem first, solved duck, -14 LUFS on the muxed file)",
+    "house: type scale ratios (one base, one ratio)"
+  ]
+}

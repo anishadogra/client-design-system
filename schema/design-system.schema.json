@@ -1,0 +1,636 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "client-design-system/1.0",
+  "title": "Client design system",
+  "description": "One file per client/page. Every video job loads it FIRST (house defaults deep-merged with the client file; dicts merge, lists and scalars in the client file REPLACE the house value). Every value must be traceable to a source listed in `sources` — never invent a colour, size or rule. Unknowns stay null and go into `open_questions`.",
+  "type": "object",
+  "required": [
+    "client",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "client": {
+      "type": "string",
+      "description": "Short key, lowercase, matches the filename (example-snack-brand, example-creator...). `_house` for the defaults file."
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Other names people type for this client; `ds.py` resolves them to this file."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "house",
+        "active",
+        "personal",
+        "archived",
+        "prospect"
+      ]
+    },
+    "updated": {
+      "type": "string",
+      "description": "YYYY-MM-DD of the last ruling folded in."
+    },
+    "inherits": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Usually `_house`. null only for the house file itself."
+    },
+    "summary": {
+      "type": "string",
+      "description": "Two or three lines: what this brand's videos look and sound like."
+    },
+    "brand": {
+      "type": "object",
+      "properties": {
+        "name_spelling": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Exact spelling rules, e.g. 'Acme Studio' (never ACME)."
+        },
+        "language": {
+          "type": "object",
+          "description": "designed_copy vs spoken captions language rules.",
+          "properties": {
+            "designed_copy": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "spoken_captions": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "notes": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "logo": {
+          "type": "object",
+          "properties": {
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "variant": {
+                    "type": "string",
+                    "description": "e.g. mark-white, mark-black, wordmark"
+                  },
+                  "use_on": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "e.g. dark backgrounds"
+                  }
+                }
+              }
+            },
+            "placement": {
+              "type": "object",
+              "description": "Per aspect key (9:16, 16:9, 1:1, 4:5): {x, y, width} in px at that aspect's canvas; `default` applies to any aspect not listed.",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  },
+                  "width": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "every_frame": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "never_ai_redraw": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "notes": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "handles": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "contact": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "palette": {
+      "type": "object",
+      "description": "Named colours, #RRGGBB. Name by role (paper, ink, accent, keyword, plate...), not by hue alone.",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^#[0-9A-Fa-f]{6}$"
+      }
+    },
+    "fonts": {
+      "type": "object",
+      "description": "Role -> font. `file` is a path relative to the repo root (e.g. fonts/Inter-Bold.ttf) or an absolute path. Font files are not committed; see fonts/README.md.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "family": {
+            "type": "string"
+          },
+          "weight": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "file": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "type_scale": {
+      "type": "object",
+      "description": "Never guess sizes: one base, x or / a ratio. Sizes are px at a 1080-wide canvas.",
+      "properties": {
+        "base_px_1080": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "ratio": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "1.618 golden, 1.414 silver, 1.333 fourth, 1.25 fifth, 1.2 minor third"
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "captions": {
+      "type": "object",
+      "properties": {
+        "policy": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "When captions appear at all (e.g. only where the overlay carries no spoken text)."
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "case": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "sentence",
+            "upper",
+            "lower",
+            "as_spoken",
+            null
+          ]
+        },
+        "max_words": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Max words per caption card."
+        },
+        "max_lines": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "min_on_screen_s": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "size_px_1080": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Caption size at a 1080-wide canvas; scaled by canvas width for other aspects unless an aspect overrides it."
+        },
+        "placement": {
+          "type": "object",
+          "description": "Keyed by aspect (9:16, 16:9, 1:1, 4:5). mode: above_head | title_band | chest | elbow | fixed_y | bottom | side_column | above_strip.",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "type": "string"
+              },
+              "fallback": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "gap_px": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "above_head: ink bottom this far above the measured head top."
+              },
+              "y_ink_bottom": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "fixed_y / elbow / bottom: ink bottom y."
+              },
+              "band": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "number"
+                },
+                "description": "[x0, x1] horizontal band the ink must stay inside."
+              },
+              "centre_x": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "side": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "right",
+                  "left",
+                  "auto",
+                  null
+                ]
+              },
+              "column": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "number"
+                },
+                "description": "side_column: [x0, x1]."
+              },
+              "anchor": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "side_column vertical anchor: eye_line | centre."
+              },
+              "size_px": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "notes": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "style": {
+                "type": [
+                  "string",
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "string"
+                },
+                "description": "Style name (or cycle) used for THIS aspect instead of captions.style_cycle, e.g. a landscape column look."
+              }
+            }
+          }
+        },
+        "styles": {
+          "type": "object",
+          "description": "Named caption looks.",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "font": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Key into `fonts` (default: caption)."
+              },
+              "fill": {
+                "type": "string"
+              },
+              "stroke": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "stroke_px": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "At 1080-wide canvas."
+              },
+              "shadow": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "color": {
+                    "type": "string"
+                  },
+                  "opacity": {
+                    "type": "number"
+                  },
+                  "dx": {
+                    "type": "number"
+                  },
+                  "dy": {
+                    "type": "number"
+                  },
+                  "blur": {
+                    "type": "number"
+                  }
+                }
+              },
+              "plate": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Per-LINE plate colour behind the ink (never one box round the block)."
+              },
+              "plate_radius_px": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "plate_pad_px": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "number"
+                },
+                "description": "[x, y]"
+              },
+              "keyword_fill": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "keyword_chip": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Chip colour behind just the keyword."
+              },
+              "keyword_chip_text": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "style_cycle": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Style names cycled caption by caption in this deliberate order. One entry = one uniform style."
+        },
+        "tilt_deg": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "number"
+          },
+          "description": "[min, max] absolute tilt; sign alternates caption to caption. [0,0] = straight."
+        },
+        "align_cycle": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "enum": [
+              "left",
+              "centre",
+              "right"
+            ]
+          }
+        },
+        "keyword_rule": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "How the keyword is picked when the editor has not marked one."
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tilt_cycle": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "number"
+          },
+          "description": "Signed tilt per caption index (the approved rhythm). Overrides tilt_deg when present."
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "description": "Safe zones and centring rules, per aspect. px at that aspect's canvas.",
+      "properties": {
+        "canvas": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "description": "aspect -> [W, H]"
+        },
+        "safe_zones": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object"
+          }
+        },
+        "centring": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "array",
+              "object",
+              "null"
+            ]
+          }
+        },
+        "framing": {
+          "type": "object",
+          "description": "Reframing rules (multi-person shots, punch-in ceilings, page colour for letterboxed strips).",
+          "additionalProperties": true
+        }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "description": "Timing floors and motion rules (comprehension >=2s, end card hard cut, freeze rules...).",
+      "additionalProperties": true
+    },
+    "audio": {
+      "type": "object",
+      "description": "Music bed level, ducking, loudness target, SFX policy, voice mastering order.",
+      "additionalProperties": true
+    },
+    "sacred_rules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Verbatim, non-negotiable client rules. Quote them; do not paraphrase."
+    },
+    "formats": {
+      "type": "object",
+      "description": "Approved named formats/techniques for this client -> short note + reference build path.",
+      "additionalProperties": true
+    },
+    "references": {
+      "type": "object",
+      "properties": {
+        "approved_builds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reference_reels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "website": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Rulings that are NOT settled. Ask the person who owns the look; never assume the answer."
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Where every value came from: brief, brand guide, a dated ruling, a reference build."
+    }
+  }
+}
